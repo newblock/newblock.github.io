@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="MichaelZ">
+    <title>链涯</title>
+
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/tstyle.css">
+    <link rel="stylesheet" href="../css/makebox.css">
+
+  </head>
+
+  <body>
+    <div class="navbar-wrapper">
+      <div class="container">
+
+        <nav class="navbar navbar-inverse navbar-static-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">Chain Career 链涯</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="findBox.html">找人才</a></li>
+                <li><a href="findPool.html">找工作</a></li>
+                <li><a href="makeBox.html">人才上链</a></li>
+                <li  class="active"><a href="makePool.html">开始挖人</a></li>
+                <li><a href="tutorial.html">钱包教程</a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+        <div class="container">
+
+          <form class="form-horizontal form-signin">
+            <div class="form-group">
+              <h2 class="form-signin-heading">请填写公司组织信息:</h2>
+            </div>
+
+            <div class="form-group">
+              <label for="firstname" class="col-md-2 form-title">* 名称  </label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" id="name" placeholder="请输入组织或团队名称" required autofocus>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="firstname" class="col-md-2 form-title">* 职位  </label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" id="pos" placeholder="请输入招聘职位" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="firstname" class="col-md-2 form-title">* 微信 </label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" id="wx" placeholder="请输入联系人微信" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="firstname" class="col-md-2 form-title">邮箱 </label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" id="mail" placeholder="请输入邮箱">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="firstname" class="col-md-2 form-title">* 链地址</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" id="address" placeholder="请输入星云地址" required>
+              </div>
+            </div>
+
+
+            <div class="form-group">
+              <h3 for="firstname" class="skill-title">*  公司组织共识愿景介绍 :</h3>
+              <textarea class="form-control" rows="8" placeholder="公司团队项目愿景目标介绍,创始高管经历简介等..." id="skill" required></textarea>
+            </div>
+          </form>
+
+            <button class="btn btn-lg btn-warning btn-block form-submit" onclick="sendPost()" id="su">提交上链</button>
+            <!-- <button class="btn btn-lg btn-success btn-block" onclick="testUp()" id="d">测试数据</button> -->
+
+        </div> <!-- /container -->
+
+
+          <hr class="featurette-divider">
+
+          <!-- /END THE FEATURETTES -->
+
+          <!-- FOOTER -->
+          <footer>
+            <div class="app_footer">
+              <br>
+              <p style="font-size:16px;font-weight:600">星云链提供生态支持<p>
+                <p> Copyright &copy;2018 Power by Michael&middot;Zhu </p>
+              </div>
+          </footer>
+
+      </div>
+    </div>
+
+
+    <script src="../lib/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+  </body>
+
+  <script src=../lib/nebPay.js></script>
+  <script src=../lib/nebulas.js></script>
+
+  <script type="text/javascript">
+
+        toastr.options.positionClass = 'toast-center-center';
+        //to check if the extension is installed
+        //if the extension is installed, var "webExtensionWallet" will be injected in to web page
+
+        if (typeof (webExtensionWallet) === "undefined")
+        {
+              toastr.warning('安装方法请点击安装钱包教程', '请先安装星云钱包插件！', {timeOut: 5000})
+        }
+
+        $("#address").attr("disabled",true);
+
+        var nebulas = require("nebulas"),
+        neb = new nebulas.Neb();
+        neb.setRequest(new nebulas.HttpRequest("https://mainnet.nebulas.io"));
+
+        var NebPay = require("nebpay");
+        var nebPay = new NebPay();
+
+        var name ;
+        var pos ;
+        var wx ;
+        var mail;
+        var address ;
+        var skill ;
+
+        var wAddress ;
+        var serialNumber;
+        var isExsistEmp = false;
+        var isExsistCom = false;
+        var intervalQuery;
+
+      function addCom()
+      {
+        var path = "https://yabu44d9.qcloud.la/weapp/savecom" ;
+
+        $.post(path,
+        {
+          "name" :name,
+          "pos"  :pos,
+          "skill":skill,
+          "wx"   :wx,
+          "mail" :mail,
+          "address": address
+        },
+        function(data,status)
+        {
+          console.log("Data: " + JSON.stringify(data) + "\nStatus: " + status);
+          console.log(address);
+          console.log(pos);
+          localStorage.setItem(address,pos);
+          console.log("getItem: " ,localStorage.getItem(address));
+          toastr.success('可以通过找工作来查看公司信息！', '组织信息发布成功啦！', {timeOut: 5000})
+        });
+
+      }
+
+      function updateCom()
+      {
+        var path = "https://yabu44d9.qcloud.la/weapp/updatecom" ;
+        console.log("update called~");
+        $.post(path,
+        {
+          "name" :name,
+          "pos"  :pos,
+          "skill":skill,
+          "wx"   :wx,
+          "mail" :mail,
+          "address": address
+        },
+        function(data,status)
+        {
+          console.log("Data: " + JSON.stringify(data) + "\nStatus: " + status);
+          toastr.success('可以通过找工作来查看更新信息！', '组织信息更新成功啦！', {timeOut: 5000})
+        });
+      }
+
+
+      function saveData()
+      {
+        console.log("save called~");
+        //使用本地存储确认
+        if(localStorage.getItem(wAddress))
+        {
+          updateCom();
+        }
+        else
+        {
+          addCom() ;
+        }
+        //$("#submit").attr("disabled",false);
+        //$("#address").attr("disabled",false);
+      }
+
+
+      function sendPost()
+      {
+        name  = $("#name").val();
+        pos   = $("#pos").val();
+        wx    = $("#wx").val();
+        mail  = $("#mail").val();
+        address = $("#address").val();
+        skill = $("#skill").val();
+        //$("#submit").attr("disabled",true);
+
+        console.log("address: " + address);
+        console.log(name);
+        console.log(pos);
+        console.log(wx);
+        console.log(mail);
+        console.log(address);
+        console.log(skill);
+
+        var value = 0.001 ;
+
+        if(localStorage.getItem(wAddress))
+        {
+          console.log("address is in local!~");
+        }
+        else
+        {
+          console.log("address is not in local!~");
+        }
+
+        var callArgs = "[\"" + pos + "\"]";
+        onClickCallDapp(value,"postCom",callArgs);
+      }
+
+      //
+      // function testUp()
+      // {
+      //   name  = $("#name").val();
+      //   pos   = $("#pos").val();
+      //   wx    = $("#wx").val();
+      //   mail  = $("#mail").val();
+      //   address = $("#address").val();
+      //   skill = $("#skill").val();
+      //
+      //   var path2 = "https://yabu44d9.qcloud.la/weapp/updatecom" ;
+      //
+      //   console.log("address:  "+wAddress);
+      //   $.post(path2,
+      //   {
+      //     "name" :name,
+      //     "pos"  :pos,
+      //     "skill":skill,
+      //     "wx"   :wx,
+      //     "mail" :mail,
+      //     "address": wAddress
+      //   },
+      //   function(data,status)
+      //   {
+      //     console.log("Data: " + JSON.stringify(data) + "\nStatus: " + status);
+      //     if (data.data.resp == 1)
+      //     {
+      //       toastr.success('工作职位发布成功啦！', 'Turtle Bay Resort', {timeOut: 5000})
+      //     }
+      //   });
+      // }
+
+      window.postMessage(
+      {
+          "target": "contentscript",
+          "data": {},
+          "method": "getAccount",
+      }, "*");
+
+      window.addEventListener('message', function (e)
+      {
+          if (e.data && e.data.data)
+          {
+              if (e.data.data.account)
+              {
+                  //这就是当前钱包中的地址
+                  var addr = e.data.data.account;
+
+                  wAddress = addr;
+
+                  console.log("address:  "+wAddress);
+
+                  //app.updateUserInfo() //获取钱包地址后，就可以调用对应的方法查询用户信息
+              }
+          }
+          if (wAddress)
+          {
+            //alert("null:  "+add);
+            $("#address").val(wAddress)
+          }
+      });
+
+      function onClickCallDapp(value,callFunction,args)
+      {
+              var to = "n1yy8h2kRe96faSkbwy6Wi1dXnJxeMQDUav"; //合约地址
+              var callArgs = args;
+
+              serialNumber =
+              nebPay.call(to,
+              value,
+              callFunction,
+              callArgs,
+              {
+                      qrcode: {
+                      showQRCode: false
+                      },
+                      goods: {
+                      name: "ccjob",
+                      desc: "0.001 nas from ccjob"
+                      },
+                      listener: cbCallDapp
+              });
+      }
+
+      function cbCallDapp(resp)
+      {
+              console.log("callback resp: " + JSON.stringify(resp));
+
+              intervalQuery = setInterval(function ()
+              {
+                funcIntervalQuery();
+              }, 10000);
+      }
+
+      function funcIntervalQuery()
+      {
+            console.log("tx Query Called: ")
+            nebPay.queryPayInfo(serialNumber).then(function(resp)
+            {
+              console.log("tx result: " + resp) //resp is a JSON string
+              var respObject = JSON.parse(resp)
+
+              if (respObject.code === 0)
+              {
+                console.log("tx Query OK: ")
+                if (respObject.data.status === 1)
+                {
+                  console.log("交易成功！写入成功！")
+
+                  saveData();
+
+                  clearInterval(intervalQuery);
+                }
+                else if (respObject.data.status === 2)
+                {
+                  console.log("正在永久写入!");
+                }
+              }
+            }).catch(function(err)
+            {
+              console.log(err);
+              clearInterval(intervalQuery)
+          });
+    }
+
+    </script>
+</html>
