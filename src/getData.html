@@ -7,10 +7,21 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>链涯</title>
+    <title>test</title>
+    <script src=../js/nebPay.js></script>
+
+
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+        crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,800" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9"
+        crossorigin="anonymous"> -->
 
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="../css/tstyle.css">
+    <script src=../lib/nebPay.js></script>
+    <script src=../lib/nebulas.js></script>
 
   </head>
 
@@ -31,12 +42,12 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
               <ul class="nav navbar-nav navbar-right">
-                <li  class="active"><a href="index.html">首页</a></li>
-                <li><a href="findBox.html">找人才</a></li>
-                <li><a href="findPool.html">找工作</a></li>
-                <li><a href="makeBox.html">人才上链</a></li>
-                <li><a href="makePool.html">开始挖人</a></li>
-                <li><a href="https://github.com/ChengOrangeJu/WebExtensionWallet">钱包教程</a></li>
+                <li class="active"><a href="#">首页</a></li>
+                <li><a href="#about">找人才</a></li>
+                <li><a href="#contact">找工作</a></li>
+                <li><a href="#contact">人才上链</a></li>
+                <li><a href="#contact">开始挖人</a></li>
+                <li><a href="#contact">钱包教程</a></li>
               </ul>
             </div>
           </div>
@@ -196,6 +207,29 @@
             </div>
           </div>
 
+
+
+          <div class="">
+            <button type="button" onclick="onClickAddText()">点我!</button>
+            <button type="button" onclick="onClickBtn()">按钮2</button>
+            <button type="button" onclick="postJson()">按钮3</button>
+            <button type="button" onclick="testContract()">合约测试</button>
+            <button type="button" onclick="getWallectInfo()">合约测试</button>
+          </div>
+
+          <div class="">
+          <form id= "upload_form">
+            <input type="text" name="filename" />
+            <input type="file" name="file"/>
+            <input type="button" value="上传" onclick="upload()" />
+          </form>
+          </div>
+
+          <div class="task-list">
+
+          </div>
+
+
           <hr class="featurette-divider">
 
           <!-- /END THE FEATURETTES -->
@@ -203,16 +237,38 @@
 
           <!-- FOOTER -->
           <footer>
-            <div class="app_footer">
-              <br>
-              <p style="font-size:16px;font-weight:600">星云链提供生态支持<p>
-                <p> Copyright &copy;2018 Power by Michael&middot;Zhu </p>
-              </div>
+            <p class="pull-right"><a href="#">Back to top</a></p>
+            <p>&copy; 2016 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
           </footer>
 
 
       </div>
     </div>
+
+    <!-- <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">共识求职</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <form class="navbar-form navbar-right">
+            <div class="form-group">
+              <input type="text" placeholder="Email" class="form-control">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success">Sign in</button>
+          </form>
+        </div>
+      </div>
+    </nav> -->
 
 
     <script src="../lib/jquery-3.3.1.min.js"></script>
@@ -223,6 +279,148 @@
 
   </body>
 
+  <script>
+
+  function onClickBtn()
+  {
+
+    var path = "https://886494025.vcblock.club/weapp/arttext?aid=" + 1 ;
+    var path2 = "https://yabu44d9.qcloud.la/weapp/savejob" ;
+    $.get(path2,function(data,status)
+    {
+      var r = JSON.stringify(data);
+      //alert("Data: " + data + "nStatus: " + status);
+      console.log(status + ":::"+ r);
+    });
+  }
+
+  function postJson()
+  {
+    var path = "https://yabu44d9.qcloud.la/weapp/savejob" ;
+
+    $.post(path,
+    {
+      id:"1",
+      name:"Donald Duck",
+      job:"Java Prog",
+      skill:"java",
+      wx:"15202155519",
+      mail:"5555@qq.com"
+    },
+    function(data,status)
+    {
+      alert("Data: " + JSON.stringify(data) + "\nStatus: " + status);
+    });
+  }
+
+  function onClickAddText()
+  {
+    let innerHtml = `<div class="d-flex justify-content-start task" data-task-id="001">
+                     <button class="task-toggle" data-completed="true">
+                      <i class="far fa-check-square></i>
+                  </button>
+                  <div class="task-content">测试测试测试</div>
+                  <button class="task-remove">
+                      &times;
+                  </button>
+              </div>`;
+              let div = document.createElement('div');
+              div.innerHTML = innerHtml;
+
+    $(".task-list").append(div.firstChild);
+  }
+
+  // function upload()
+  // {
+  //   //var form = new FormData($("#upload_form")[0]);
+  //
+  //   $.ajax({
+  //         //几个参数需要注意一下
+  //             type: "POST",//方法类型
+  //             dataType: "json",//预期服务器返回的数据类型
+  //             url: "https://yabu44d9.qcloud.la/weapp/upload" ,//url
+  //             data: $('#upload_form')[0],
+  //             success: function (result) {
+  //                 console.log(result);//打印服务端返回的数据(调试用)
+  //                 if (result.resultCode == 200) {
+  //                     alert("SUCCESS");
+  //                 }
+  //                 ;
+  //             },
+  //             error : function() {
+  //                 alert("异常！");
+  //             }
+  //         });
+  // }
+
+        var nebulas = require("nebulas"),
+        neb = new nebulas.Neb();
+        neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
+
+        var NebPay = require("nebpay");
+        var nebPay = new NebPay();
+        //to check if the extension is installed
+        //if the extension is installed, var "webExtensionWallet" will be injected in to web page
+        setTimeout(function () { if (typeof (webExtensionWallet) === "undefined") {
+                alert("请先安装星云钱包插件.");
+        }}, 500); //等待加载钱包
+        function onClickCallDapp(value,callFunction,args)
+        {
+                var to = "n1mSeomqNjTYALFJidHY1NMZoChd83h7nH6"; //合约地址
+                var callArgs = args;
+                nebPay.call(to,
+                value,
+                callFunction,
+                callArgs,
+                {
+                        qrcode: {
+                        showQRCode: false
+                        },
+                        goods: {
+                        name: "ccjob",
+                        desc: "0.001 nas from ccjob"
+                        },
+                        listener: cbCallDapp
+                });
+        }
+        function cbCallDapp(resp)
+        {
+                console.log("callback resp: " + JSON.stringify(resp));
+        }
+
+        function testContract()
+        {
+          var callArgs = "[\"" + "前端工程师"+ "\"]";
+          //var callArgs = "fdadfafdsa";
+          onClickCallDapp(0.001,"postEmployee",callArgs);
+        }
+
+          function getWallectInfo()
+          {
+            var add ;
+            window.postMessage({
+                "target": "contentscript",
+                "data": {},
+                "method": "getAccount",
+            }, "*");
+            window.addEventListener('message', function (e)
+            {
+                if (e.data && e.data.data) {
+                    if (e.data.data.account) {//这就是当前钱包中的地址
+                        var address = e.data.data.account;
+
+                        add = address;
+
+                        console.log("address:  "+address);
+                        //app.updateUserInfo() //小提示：获取钱包地址后，就可以调用对应的方法查询用户信息啦
+                    }
+                }
+            });
+
+            if (!add) {
+              alert("null:  "+add);
+            }
+          }
 
   </script>
 </html>
