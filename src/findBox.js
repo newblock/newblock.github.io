@@ -41,7 +41,7 @@ $(document).ready(function()
            '</div><div class="col-md-7 col-md-push-3">'+
            '<h2 class="featurette-heading featurette-name text-muted">链名:阿甘</h2>'+
            '<h3 class="featurette-heading ">职位: 产品经理 前端工程师</h3>'+
-           '<p class="lead">我是一个兵，来自老百姓，</p>'+
+           '<p class="lead"></p>'+
            '</div>'+
            '<div class="col-md-3 col-md-pull-7">'+
            '<div class="featurette-colorblock_B center-block">'+
