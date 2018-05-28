@@ -135,6 +135,10 @@ body {
   font-size: 20px;
 }
 
+.featurette-tutorial{
+  color: #ff9900;
+}
+
  .featurette-image.pull-left {
   margin-right: 40px;
 }
