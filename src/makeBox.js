@@ -6,7 +6,7 @@
 
       if (typeof (webExtensionWallet) === "undefined")
       {
-            toastr.warning('安装方法请点击安装钱包教程', '请先安装星云钱包插件！', {timeOut: 5000})
+          toastr.warning('安装方法请点击安装钱包教程', '请先安装星云钱包插件！', {timeOut: 5000})
       }
 
       $("#address").attr("disabled",true);
@@ -14,6 +14,13 @@
       var nebulas = require("nebulas"),
       neb = new nebulas.Neb();
       neb.setRequest(new nebulas.HttpRequest("https://mainnet.nebulas.io"));
+
+      //var const pathNewBox = "https://886494025.vcblock.club/savejob";
+      //var const pathUpdateBox = "https://886494025.vcblock.club/upjob";
+
+      var pathNewBox = "https://yabu44d9.qcloud.la/weapp/savejob";
+      var pathUpdateBox = "https://yabu44d9.qcloud.la/weapp/upjob";
+      var pathHasBlock = "https://yabu44d9.qcloud.la/weapp/isHasBlock?aid=";
 
       var NebPay = require("nebpay");
       var nebPay = new NebPay();
@@ -63,6 +70,7 @@
 
       function onClickCallDapp(value,callFunction,args)
       {
+              //var to = "n1trRzBMP5epWqB1pDe5APcDVCpLQtfeEfu"; //测试合约
               var to = "n1yy8h2kRe96faSkbwy6Wi1dXnJxeMQDUav"; //合约地址
               var callArgs = args;
 
@@ -76,63 +84,133 @@
                       showQRCode: false
                       },
                       goods: {
-                      name: "ccjob",
-                      desc: "0.001 nas from ccjob"
+                      name: "ccjob"
                       },
                       listener: cbCallDapp
               });
       }
 
+      var txCheckHash ;
       function cbCallDapp(resp)
       {
-              console.log("callback resp: " + JSON.stringify(resp));
+            console.log("callback resp: " + JSON.stringify(resp));
+            txCheckHash = resp.txhash;
+            console.log("txhash --: "+txCheckHash);
 
-              intervalQuery = setInterval(function ()
-              {
-                funcIntervalQuery();
-              }, 10000);
+            intervalQuery = setInterval(function ()
+            {
+              query2();
+            }, 5000);
       }
 
-      function funcIntervalQuery()
+      function query2()
       {
-            console.log("tx Query Called: ")
-            nebPay.queryPayInfo(serialNumber).then(function(resp)
-            {
-              console.log("tx result: " + resp) //resp is a JSON string
-              var respObject = JSON.parse(resp)
+        neb.api.getTransactionReceipt(txCheckHash)
+                    .then(doneGetTransactionReceipt)
+                    .catch(function (o)
+                    {
+                      console.log(o.message);
+                    });
+      }
 
-              if (respObject.code === 0)
-              {
-                console.log("tx Query OK: ")
-                if (respObject.data.status === 1)
-                {
-                  console.log("交易成功！写入成功！")
+      function doneGetTransactionReceipt(o)
+      {
+        var logText = o.status == 1 ? "success" : (o.status == 0 ? "fail" : "pending");
 
-                  saveData();
+        console.log(logText);
 
-                  clearInterval(intervalQuery);
-                }
-                else if (respObject.data.status === 2)
-                {
-                  console.log("正在永久写入!");
-                }
-              }
-              else if(respObject.code === 1)
-              {
-                console.log("正在查询中..."+JSON.stringify(respObject));
-              }
-            }).catch(function(err)
-            {
-              console.log(err);
-              //clearInterval(intervalQuery)
-          });
+        if (o.status == 1)
+        {
+          saveData();
+
+          clearInterval(intervalQuery);
         }
+        if (o.status == 0)
+        {
+            clearInterval(intervalQuery);
+            toastr.warning('提交信息上链失败,请确认账号中费用充足!', {timeOut: 5000});
+        }
+      }
+
+            function saveData()
+            {
+              console.log("save called~");
+              var fullPath = pathHasBlock + address;
+              var blocks ;
+
+              $.get(fullPath,function(data,status)
+              {
+                blocks = data ;
+                var r = JSON.stringify(data);
+                 console.log(status + ":::"+ r);
+                 if(blocks.length != 0)
+                 {
+                   console.log("update box");
+                   updateEmp();
+                 }
+                 else
+                 {
+                   console.log("added box");
+                   addEmp() ;
+                 }
+              });
+
+              //$("#submit").attr("disabled",false);
+              //$("#address").attr("disabled",false);
+            }
+
+            function sendPost()
+            {
+
+              name  = $("#name").val();
+              pos   = $("#pos").val();
+              wx    = $("#wx").val();
+              mail  = $("#mail").val();
+              address = $("#address").val();
+              skill = $("#skill").val();
+
+              if (name==""||
+                  pos==""||
+                  mail==""||
+                  address==""||
+                  skill=="")
+              {
+                toastr.warning('请完善你的信息', {timeOut: 5000});
+                return ;
+              }
+
+              console.log("address: " + address);
+              console.log(name);
+              console.log(pos);
+              console.log(wx);
+              console.log(mail);
+              console.log(address);
+              console.log(skill);
+
+              var value = 0 ;
+
+              var fullPath = pathHasBlock + address;
+              var blocks ;
+
+              $.get(fullPath,function(data,status)
+              {
+                blocks = data ;
+                var r = JSON.stringify(data);
+                 console.log(status + ":::"+ fullPath);
+                 if(blocks.length != 0)
+                 {
+                   console.log("blokc is Ex!");
+                   value = 0.001 ;
+                 }
+                 var callArgs = "[\"" + pos+ "\"]";
+                 onClickCallDapp(value,"postEmployee",callArgs);
+              });
+
+            }
 
       function addEmp()
       {
-        var path = "https://yabu44d9.qcloud.la/weapp/savejob" ;
-
-        $.post(path,
+        $.post(pathNewBox,
         {
           "name" :name,
           "job"  :pos,
@@ -146,8 +224,6 @@
           console.log("Data: " + JSON.stringify(data) + "\nStatus: " + status);
           console.log(address);
           console.log(pos);
-          localStorage.setItem(address,pos);
-          console.log("getItem: " ,localStorage.getItem(address));
           toastr.success('可以通过找人才来查看更新信息！', '工作数据提交成功啦！', {timeOut: 5000})
         });
 
@@ -155,9 +231,7 @@
 
       function updateEmp()
       {
-        var path = "https://yabu44d9.qcloud.la/weapp/upjob" ;
-
-        $.post(path,
+        $.post(pathUpdateBox,
         {
           "name" :name,
           "job"  :pos,
@@ -173,60 +247,6 @@
         });
       }
 
-
-      function saveData()
-      {
-        return;
-        console.log("save called~");
-        //使用本地存储确认
-        if(localStorage.getItem(wAddress))
-        {
-          console.log("update called~");
-          updateEmp();
-        }
-        else
-        {
-          addEmp() ;
-        }
-
-        //$("#submit").attr("disabled",false);
-        //$("#address").attr("disabled",false);
-      }
-
-      function sendPost()
-      {
-        name  = $("#name").val();
-        pos   = $("#pos").val();
-        wx    = $("#wx").val();
-        mail  = $("#mail").val();
-        address = $("#address").val();
-        skill = $("#skill").val();
-        //$("#submit").attr("disabled",true);
-
-        console.log("address: " + address);
-        console.log(name);
-        console.log(pos);
-        console.log(wx);
-        console.log(mail);
-        console.log(address);
-        console.log(skill);
-
-        var value = 0 ;
-
-        if(localStorage.getItem(wAddress))
-        {
-          console.log("address is in local!~");
-          value = 0.001 ;
-        }
-        else
-        {
-          console.log("address is not in local!~");
-        }
-
-        var callArgs = "[\"" + pos+ "\"]";
-        onClickCallDapp(value,"postEmployee",callArgs);
-
-      }
 
 
       // function testUp()

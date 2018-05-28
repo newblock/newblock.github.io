@@ -4,7 +4,7 @@ $(document).ready(function()
 
   function getbData()
   {
-    var path = "https://886494025.vcblock.club/weapp/gblocks" ;
+    var path = "https://yabu44d9.qcloud.la/weapp/gblocks" ;
 
     var blocks ;
     $.get(path,function(data,status)

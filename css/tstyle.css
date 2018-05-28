@@ -216,10 +216,10 @@ body {
 
 .toast-center-center{
 
-    top: 50%;
+    top: 45%;
     left: 50%;
     margin-top: -25px;
-    margin-left: -150px;
+    margin-left: -125px;
 }
 
 .app_footer
