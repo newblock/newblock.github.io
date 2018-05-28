@@ -1,5 +1,4 @@
-$(document).ready(function()
-{
+
         toastr.options.positionClass = 'toast-center-center';
         //to check if the extension is installed
         //if the extension is installed, var "webExtensionWallet" will be injected in to web page
@@ -251,4 +250,3 @@ $(document).ready(function()
               clearInterval(intervalQuery)
           });
       }
-});

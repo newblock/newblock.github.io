@@ -1,5 +1,4 @@
-$(document).ready(function()
-{
+
       //localStorage.clear();
       toastr.options.positionClass = 'toast-center-center';
       //to check if the extension is installed
@@ -37,7 +36,7 @@ $(document).ready(function()
           "target": "contentscript",
           "data": {},
           "method": "getAccount",
-      }, "*");
+      },  "*");
 
       window.addEventListener('message', function (e)
       {
@@ -260,4 +259,3 @@ $(document).ready(function()
       //     }
       //   });
       // }
-});
