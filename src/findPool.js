@@ -30,7 +30,7 @@ $(document).ready(function()
                  '<p class="lead">我是一个兵，来自老百姓，</p>'+
                  '</div>'+
                  '<div class="col-md-3">'+
-                 '<div class="featurette-colorblock center-block">'+
+                 '<div class="featurette-colorblock_com_A center-block">'+
                  '</div>'+
                  '</div>'+
                  '</div>'+
@@ -45,7 +45,7 @@ $(document).ready(function()
                  '<p class="lead">我是一个兵，来自老百姓，</p>'+
                  '</div>'+
                  '<div class="col-md-3 col-md-pull-7">'+
-                 '<div class="featurette-colorblock center-block">'+
+                 '<div class="featurette-colorblock_com_B center-block">'+
                  '</div>'+
                  '</div>'+
                  '</div>'+
