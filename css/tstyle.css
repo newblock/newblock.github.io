@@ -145,6 +145,10 @@ body {
  .featurette-image.pull-right {
   margin-left: 40px;
 }
+ .carousel_display
+ {
+   display: none;
+ }
 
 /* RESPONSIVE CSS
 -------------------------------------------------- */
@@ -204,7 +208,10 @@ body {
   {
     display:block;
   }
-
+  .carousel_display
+  {
+    display: block;
+  }
 }
 
 .toast-center-center{
