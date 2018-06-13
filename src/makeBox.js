@@ -18,9 +18,9 @@
       //var const pathNewBox = "https://886494025.vcblock.club/savejob";
       //var const pathUpdateBox = "https://886494025.vcblock.club/upjob";
 
-      var pathNewBox = "https://yabu44d9.qcloud.la/weapp/savejob";
-      var pathUpdateBox = "https://yabu44d9.qcloud.la/weapp/upjob";
-      var pathHasBlock = "https://yabu44d9.qcloud.la/weapp/isHasBlock?aid=";
+      var pathNewBox = "https://886494025.vcblock.club/weapp/savejob";
+      var pathUpdateBox = "https://886494025.vcblock.club/weapp/upjob";
+      var pathHasBlock = "https://886494025.vcblock.club/weapp/isHasBlock?aid=";
 
       var NebPay = require("nebpay");
       var nebPay = new NebPay();

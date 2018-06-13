@@ -14,9 +14,9 @@
         neb = new nebulas.Neb();
         neb.setRequest(new nebulas.HttpRequest("https://mainnet.nebulas.io"));
 
-        var pathNewCom = "https://yabu44d9.qcloud.la/weapp/savecom";
-        var pathUpdateCom = "https://yabu44d9.qcloud.la/weapp/updatecom";
-        var pathHasBlock = "https://yabu44d9.qcloud.la/weapp/isHasCom?aid=";
+        var pathNewCom = "https://886494025.vcblock.club/weapp/savecom";
+        var pathUpdateCom = "https://886494025.vcblock.club/weapp/updatecom";
+        var pathHasBlock = "https://886494025.vcblock.club/weapp/isHasCom?aid=";
 
         var NebPay = require("nebpay");
         var nebPay = new NebPay();
